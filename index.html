@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArtyShea SNACK FUND</title>
+  <title>ArtyShea SnacksD</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -48,7 +48,7 @@
   </style>
 </head>
 <body>
-  <h1>ArtyShea SNACK FUND</h1>
+  <h1>ArtyShea Snacks</h1>
 
   <form id="snackForm">
     <div class="item"><label>Kirkland Trail Mix ($1.00)</label><input type="number" min="0" step="1" value="0" data-price="1"></div>
@@ -89,7 +89,7 @@
       });
       total = total.toFixed(2);
       totalDisplay.textContent = total;
-      payLink.href = `https://cash.app/$artysheallc/${total}`;
+      payLink.href = `https://cash.app/$artysheallc/${total}?note=Snack%20Fund%20Purchase%20to%20ArtyShea%20Snacks`;
     }
 
     inputs.forEach(input => input.addEventListener('input', updateTotal));
