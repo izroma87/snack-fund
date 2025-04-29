@@ -96,21 +96,57 @@
       payLink.href = `https://cash.app/$artysheallc/${total}?note=Snack%20Fund%20Purchase%20to%20ArtyShea%20Snacks`;
     }
 
-    inputs.forEach(input => input.addEventListener('input', updateTotal));
-
     function copyCashtag() {
       navigator.clipboard.writeText('$artysheallc').then(() => {
         alert('Copied $artysheallc to clipboard!');
       });
     }
 
-    payLink.addEventListener('click', function() {
+    function sendToGoogleSheet(purchaseData) {
+      fetch('https://script.google.com/macros/s/AKfycbx09BfXRNkkfEQJVOyYNKHcTijFDNGqtkH42L8EY1_rOPJPgJCm4pRGPQVXSRThSogR/exec', {
+        method: 'POST',
+        body: JSON.stringify(purchaseData),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.text())
+      .then(result => {
+        console.log('Google Sheet updated:', result);
+      })
+      .catch(error => {
+        console.error('Error sending to Google Sheet:', error);
+      });
+    }
+
+    payLink.addEventListener('click', function () {
       const totalAmount = document.getElementById('total').textContent;
       navigator.clipboard.writeText(totalAmount).then(() => {
         alert(`Total $${totalAmount} copied! Please paste it into Cash App.`);
       });
+
+      const items = [];
+      inputs.forEach(input => {
+        const quantity = parseInt(input.value) || 0;
+        if (quantity > 0) {
+          const itemName = input.parentElement.querySelector('label').textContent.split(' ($')[0].trim();
+          const price = parseFloat(input.dataset.price);
+          const itemTotal = (price * quantity).toFixed(2);
+          items.push({
+            name: itemName,
+            quantity: quantity,
+            total: parseFloat(itemTotal)
+          });
+        }
+      });
+
+      const purchaseData = { items: items };
+      sendToGoogleSheet(purchaseData);
     });
+
+    inputs.forEach(input => input.addEventListener('input', updateTotal));
   </script>
 </body>
 </html>
+
 
